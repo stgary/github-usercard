@@ -24,7 +24,6 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -45,6 +44,58 @@ const followersArray = [];
 </div>
 
 */
+
+function buildCard(obj) {
+  
+  const card = document.createElement('div'),
+        img = document.createElement('img'),
+        cardInfo = document.createElement('div'),
+        name = document.createElement('h3'),
+        username = document.createElement('p'),
+        location = document.createElement('p'),
+        profile = document.createElement('p'),
+        address = document.createElement('a'),
+        followers = document.createElement('p'),
+        following = document.createElement('p'),
+        bio = document.createElement('p');
+
+  card.append(img, cardInfo);
+  cardInfo.append(name, username, location, profile, followers, following, bio);
+  profile.append(address);
+
+  img.src = obj.avatar_url;
+  name.textContent = obj.name;
+  username.textContent = obj.login;
+  location.textContent = obj.location;
+  address.textContent = obj.html_url;
+  followers.textContent = 'followers ' + obj.followers;
+  following.textContent = 'following ' + obj.following;
+  bio.textContent = 'bio ' + obj.bio;
+
+  card.classList.add('card');
+  cardInfo.classList.add('card-info');
+  name.classList.add('name');
+
+  return card;
+
+}
+
+const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
+
+const cards = document.querySelector('.cards');
+
+followersArray.forEach(item => {
+  const userName = item;
+axios.get(`https://api.github.com/users/${userName}`)
+.then(response => {
+  console.log(response.data)
+  cards.append(buildCard(response.data));
+})
+.catch(error => {
+  console.log(error)
+});
+
+})
 
 /* List of LS Instructors Github username's: 
   tetondan
